@@ -16,15 +16,35 @@ class snake:
 class comida:
     x = random.randrange(20,880)
     y = random.randrange(20,580)
-    largura = 5
-    comprimento = 5
-    cor = (0,0,255) #RGB
+    largura = 7
+    comprimento = 7
+    cor = (0,255,0) #RGB
 
+class borda:
+    x = 5
+    y = 5
+    largura = 5
+    comprimento = 890
+    cor = (255, 255, 255) #RGB
+
+borda_cima = borda() #Borda
+borda_baixo = borda() #Borda
+borda_baixo.y = 590
+borda_direita = borda() #Borda
+borda_direita.x = 890
+borda_direita.y = 5
+borda_direita.largura = 590
+borda_direita.comprimento = 5
+borda_esquerda = borda() #Borda
+borda_esquerda.x = 5
+borda_esquerda.y = 5
+borda_esquerda.largura = 590
+borda_esquerda.comprimento = 5
 
 pygame.init()
 tela = pygame.display.set_mode((900,600)) #Resolução da janela
-pygame.display.set_caption("Projeto P1 // Snake")
-pygame.mouse.set_visible(0)
+pygame.display.set_caption("Projeto P1 // Snake") #Nome da janela
+pygame.mouse.set_visible(0) #Visibilidade do mouse
 
 aberto = True
 while aberto:
@@ -46,7 +66,12 @@ while aberto:
             snake.x_atual += snake.vel
     
     tela.fill((0, 0, 0))
-    pygame.draw.rect(tela, snake.cor, (snake.x_atual , snake.y_atual, snake.comprimento, snake.largura))
+    pygame.draw.rect(tela, snake.cor, (snake.x_atual , snake.y_atual, snake.comprimento, snake.largura)) #Cobra
+    pygame.draw.rect(tela, comida.cor,(comida.x, comida.y, comida.comprimento, comida.largura)) #Comida
+    pygame.draw.rect(tela, borda.cor, (borda_cima.x, borda_cima.y, borda_cima.comprimento, borda_cima.largura)) #Bordas
+    pygame.draw.rect(tela, borda.cor, (borda_baixo.x, borda_baixo.y, borda_baixo.comprimento, borda_baixo.largura))
+    pygame.draw.rect(tela, borda.cor, (borda_esquerda.x, borda_esquerda.y, borda_esquerda.comprimento, borda_esquerda.largura))
+    pygame.draw.rect(tela, borda.cor, (borda_direita.x, borda_direita.y, borda_direita.comprimento, borda_direita.largura))
     pygame.display.update()
 
 pygame.quit()
