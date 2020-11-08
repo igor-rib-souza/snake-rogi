@@ -1,9 +1,22 @@
+#================7/11
+#Eu vou precisar modificar a movimentação
+#para quando a cobra for se mover verticalmente, exemplo:
+#if event.type == KEYDOWN and event.key == K_w:
+#   if last_key == "a" or last_key == "d"
+
+#Também preciso implementar colisões, pontuação, crescimento após comer, aceleração ao longo do tempo
+
+#================8/11
+#Eu implementei colisões para a cobra parar caso bata na parede, mas pq? Ela vai morrer de qlqr forma...
+#Eu preciso entender melhor POO para criar um modo de dois jogadores no futuro, melhor estudar logo isso para não ter de
+#refazer todo o código depois...
+
 import pygame
 import random
 
 pygame.init()
 
-class snake:
+class snake:  #Aqui eu preciso aprender como usar o __init__ para criar o modo multiplayer
     start_x = random.randrange(50,850)
     start_y = random.randrange(50,550)
     vel = 5
@@ -46,6 +59,7 @@ tela = pygame.display.set_mode((900,600)) #Resolução da janela
 pygame.display.set_caption("Projeto P1 // Snake") #Nome da janela
 pygame.mouse.set_visible(0) #Visibilidade do mouse
 
+last_key = None  #Uma ideia para consertar a movimentação
 aberto = True
 while aberto:
     pygame.time.delay(100)
@@ -53,18 +67,19 @@ while aberto:
     for event in pygame.event.get():
         if event.type == pygame.QUIT: #Fechar janela
             aberto = False
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_w: #Movimentação
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_w and snake.y_atual>15: #Movimentação
             snake.y_atual -= snake.vel
-
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_a:
+            last_key = "w"
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_a and snake.x_atual>15: #
             snake.x_atual -= snake.vel
-
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_s:
+            last_key = "a"
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_s and snake.y_atual<580: #
             snake.y_atual += snake.vel
-
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_d:
+            last_key = "s"
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_d and snake.x_atual<870: #
             snake.x_atual += snake.vel
-    
+            last_key = "d"
+
     tela.fill((0, 0, 0))
     pygame.draw.rect(tela, snake.cor, (snake.x_atual , snake.y_atual, snake.comprimento, snake.largura)) #Cobra
     pygame.draw.rect(tela, comida.cor,(comida.x, comida.y, comida.comprimento, comida.largura)) #Comida
