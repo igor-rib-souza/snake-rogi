@@ -29,7 +29,6 @@ pygame.mouse.set_visible(0)
 aberto = True
 while aberto:
     pygame.time.delay(100)
-    pygame.draw.rect(tela, snake.cor, (snake.x_atual , snake.y_atual, snake.comprimento, snake.largura))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT: #Fechar janela
@@ -45,6 +44,9 @@ while aberto:
 
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_d:
             snake.x_atual += snake.vel
+    
+    tela.fill((0, 0, 0))
+    pygame.draw.rect(tela, snake.cor, (snake.x_atual , snake.y_atual, snake.comprimento, snake.largura))
     pygame.display.update()
 
 pygame.quit()
