@@ -1,14 +1,23 @@
-#================7/11
-#Eu vou precisar modificar a movimentação
-#para quando a cobra for se mover verticalmente, exemplo:
-#if event.type == KEYDOWN and event.key == K_w:
-#   if last_key == "a" or last_key == "d"
+"""================7/11
+Eu vou precisar modificar a movimentação
+para quando a cobra for se mover verticalmente, exemplo:
+if event.type == KEYDOWN and event.key == K_w:
+   if last_key == "a" or last_key == "d"
 
-#Também preciso implementar colisões, pontuação, crescimento após comer, aceleração ao longo do tempo
+Também preciso implementar colisões, pontuação, crescimento após comer, aceleração ao longo do tempo
 
-#================8/11
-#Se a cobra tocar na comida(a hitbox não está perfeita) a comida troca de lugar e são somados 10 pontos(que eu ainda não sei como exibir no jogo)
-#se a cobra toca a parede ela nasce em outro ponto, preciso implementar a diminuição de pontos caso isso aconteça
+================8/11
+Se a cobra tocar na comida(a hitbox não está perfeita) a comida troca de lugar e são somados 10 pontos(que eu ainda não sei como exibir no jogo)
+se a cobra toca a parede ela nasce em outro ponto, preciso implementar a diminuição de pontos caso isso aconteça
+
+
+================9/11
+Eu preciso mudar todo o sistema de movimentação *para dentro de while's, para quando uma tecla for pressionada ele andar nql posição até 
+outra tecla ser pressionada
+
+Preciso modificar a movimentação para só mudar para direita/esquerda quando estiver subindo e descendo e vice-versa
+
+Preciso APRENDER(ou descobrir...) como fazer a animação do movimento e como mostrar a pontuação in-game"""
 
 import pygame
 import random
@@ -38,67 +47,80 @@ class comida:
     cor = (0,255,0) #RGB
 
 class borda:
-    x = 5
-    y = 5
-    largura = 5
-    comprimento = 890
-    cor = (255, 255, 255) #RGB
+    def __init__(self, x, y, largura, comprimento):
+        self.x = x #5
+        self.y = y #5
+        self.largura = largura #5
+        self.comprimento = comprimento #890
+        self.cor = (255, 255, 255) #RGB
 
-borda_cima = borda() #Borda
-borda_baixo = borda() #Borda
-borda_baixo.y = 590
-borda_direita = borda() #Borda
-borda_direita.x = 890
-borda_direita.y = 5
-borda_direita.largura = 590
-borda_direita.comprimento = 5
-borda_esquerda = borda() #Borda
-borda_esquerda.x = 5
-borda_esquerda.y = 5
-borda_esquerda.largura = 590
-borda_esquerda.comprimento = 5
+borda_cima = borda(5, 5, 5, 890) #Borda
+borda_baixo = borda(5, 590, 5, 890) #Borda
+borda_direita = borda(890, 5, 590, 5) #Borda
+borda_esquerda = borda(5, 5, 590, 5) #Borda
+
 
 pygame.init()
 tela = pygame.display.set_mode((900,600)) #Resolução da janela
 pygame.display.set_caption("Projeto P1 // Snake") #Nome da janela
 pygame.mouse.set_visible(0) #Visibilidade do mouse
 
-last_key = None  #Uma ideia para consertar a movimentação
+last_key = random.choice(["w", "a", "s", "d"])  #Uma ideia para consertar a movimentação
 aberto = True
 while aberto:
     pygame.time.delay(100)
-
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT: #Fechar janela
             aberto = False
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_w: #Movimentação
             if snake1.y>15:
-                snake1.y -= snake1.vel
-                last_key = "w"
+                last_key = "w" 
             else:
                 snake1.x = random.randrange(20,880)
                 snake1.y = random.randrange(20,580)
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_a: #
             if snake1.x>15:
-                snake1.x -= snake1.vel
-                last_key = "a"
+                last_key = "a" 
             else:
                 snake1.x = random.randrange(20,880)
                 snake1.y = random.randrange(20,580)
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_s: #
             if snake1.y<580:
-                snake1.y += snake1.vel
-                last_key = "s"
+                last_key = "s" 
             else:
                 snake1.x = random.randrange(20,880)
                 snake1.y = random.randrange(20,580)
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_d: #
             if snake1.x<870:
-                snake1.x += snake1.vel
-                last_key = "d"
+                last_key = "d" 
             else:
                 snake1.x = random.randrange(20,880)
                 snake1.y = random.randrange(20,580)
+    if last_key == "w":
+        if snake1.y>15:
+            snake1.y -= snake1.vel
+        else:
+            snake1.x = random.randrange(20,880)
+            snake1.y = random.randrange(20,580)
+    elif last_key == "a":
+        if snake1.x>15:
+            snake1.x -= snake1.vel
+        else:
+            snake1.x = random.randrange(20,880)
+            snake1.y = random.randrange(20,580)
+    elif last_key == "s":
+        if snake1.y<580:
+            snake1.y += snake1.vel
+        else:
+            snake1.x = random.randrange(20,880)
+            snake1.y = random.randrange(20,580)
+    elif last_key == "d":
+        if snake1.x<870:
+            snake1.x += snake1.vel
+        else:
+            snake1.x = random.randrange(20,880)
+            snake1.y = random.randrange(20,580)
 
     tela.fill((0, 0, 0))
     pygame.draw.rect(tela, snake1.cor, (snake1.x , snake1.y, snake1.comprimento, snake1.largura)) #Cobra
@@ -107,10 +129,10 @@ while aberto:
         comida.x = random.randrange(25, 880)
         comida.y = random.randrange(25, 580)
         pontos += 10
-    pygame.draw.rect(tela, borda.cor, (borda_cima.x, borda_cima.y, borda_cima.comprimento, borda_cima.largura)) #Bordas
-    pygame.draw.rect(tela, borda.cor, (borda_baixo.x, borda_baixo.y, borda_baixo.comprimento, borda_baixo.largura))
-    pygame.draw.rect(tela, borda.cor, (borda_esquerda.x, borda_esquerda.y, borda_esquerda.comprimento, borda_esquerda.largura))
-    pygame.draw.rect(tela, borda.cor, (borda_direita.x, borda_direita.y, borda_direita.comprimento, borda_direita.largura))
+    pygame.draw.rect(tela, borda_cima.cor, (borda_cima.x, borda_cima.y, borda_cima.comprimento, borda_cima.largura)) #Bordas
+    pygame.draw.rect(tela, borda_baixo.cor, (borda_baixo.x, borda_baixo.y, borda_baixo.comprimento, borda_baixo.largura))
+    pygame.draw.rect(tela, borda_esquerda.cor, (borda_esquerda.x, borda_esquerda.y, borda_esquerda.comprimento, borda_esquerda.largura))
+    pygame.draw.rect(tela, borda_direita.cor, (borda_direita.x, borda_direita.y, borda_direita.comprimento, borda_direita.largura))
     pygame.display.update()
 
 pygame.quit()
