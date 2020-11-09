@@ -67,6 +67,11 @@ pygame.mouse.set_visible(0) #Visibilidade do mouse
 
 
 last_key = random.choice(["w", "a", "s", "d"])  #Uma ideia para consertar a movimentação
+if last_key in ["w", "s"]:
+    temp = snake1.comprimento
+    snake1.comprimento = snake1.largura
+    snake1.largura = temp
+
 aberto = True
 while aberto:
     pygame.time.delay(100)
@@ -74,15 +79,30 @@ while aberto:
     for event in pygame.event.get():
         if event.type == pygame.QUIT: #Fechar janela
             aberto = False
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_w and last_key != "s": #Movimentação
-            last_key = "w" 
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_a and last_key != "d": #
-            last_key = "a" 
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_s and last_key != "w": #
-            last_key = "s" 
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_w and not last_key in ["s","w"]: #Movimentação
+            last_key = "w"
+            temp = snake1.comprimento
+            snake1.comprimento = snake1.largura
+            snake1.largura = temp
 
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_d and last_key != "a": #
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_a and not last_key  in ["d", "a"]: #
+            last_key = "a" 
+            temp = snake1.comprimento
+            snake1.comprimento = snake1.largura
+            snake1.largura = temp
+
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_s and not last_key in ["w", "s"]: #
+            last_key = "s" 
+            temp = snake1.comprimento
+            snake1.comprimento = snake1.largura
+            snake1.largura = temp
+
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_d and not last_key in ["a", "d"]: #
             last_key = "d" 
+            temp = snake1.comprimento
+            snake1.comprimento = snake1.largura
+            snake1.largura = temp
+
     
     #Aqui começa a movimentação, por algum erro que eu **AINDA** não identifiquei o respawn da parte de cima não esta funcionando
     if last_key == "w":
