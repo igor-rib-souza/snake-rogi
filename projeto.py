@@ -75,29 +75,14 @@ while aberto:
         if event.type == pygame.QUIT: #Fechar janela
             aberto = False
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_w and last_key != "s": #Movimentação
-            if snake1.y>15:
-                last_key = "w" 
-            else:
-                snake1.x = random.randrange(20,880)
-                snake1.y = random.randrange(20,580)
+            last_key = "w" 
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_a and last_key != "d": #
-            if snake1.x>15:
-                last_key = "a" 
-            else:
-                snake1.x = random.randrange(20,880)
-                snake1.y = random.randrange(20,580)
+            last_key = "a" 
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_s and last_key != "w": #
-            if snake1.y<580:
-                last_key = "s" 
-            else:
-                snake1.x = random.randrange(20,880)
-                snake1.y = random.randrange(20,580)
+            last_key = "s" 
+
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_d and last_key != "a": #
-            if snake1.x<870:
-                last_key = "d" 
-            else:
-                snake1.x = random.randrange(20,880)
-                snake1.y = random.randrange(20,580)
+            last_key = "d" 
     
     #Aqui começa a movimentação, por algum erro que eu **AINDA** não identifiquei o respawn da parte de cima não esta funcionando
     if last_key == "w":
