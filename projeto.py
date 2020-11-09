@@ -34,6 +34,9 @@ class snake:  #Aqui eu preciso aprender como usar o __init__ para criar o modo m
         self.comprimento = 17
         self.largura = 7
         self.cor = cor #RGB
+        self.pre_x = self.x
+        self.pre_y = self.y
+        self.size = 1
 
 snake1 = snake((255, 0, 0))
 snake2 = snake((200, 0, 200)) #isso deve ser usado quando o sonho de um multiplayer for real
@@ -107,6 +110,7 @@ while aberto:
     #Aqui começa a movimentação, por algum erro que eu **AINDA** não identifiquei o respawn da parte de cima não esta funcionando
     if last_key == "w":
         if snake1.y>15:
+            snake1.pre_y = snake1.y
             snake1.y -= snake1.vel
         else:
             snake1.x = random.randrange(20,880)
@@ -114,6 +118,7 @@ while aberto:
             pontos -= 50
     elif last_key == "a":
         if snake1.x>15:
+            snake1.pre_x = snake1.x
             snake1.x -= snake1.vel
         else:
             snake1.x = random.randrange(20,880)
@@ -121,6 +126,7 @@ while aberto:
             pontos -=50
     elif last_key == "s":
         if snake1.y<580:
+            snake1.pre_y = snake1.y
             snake1.y += snake1.vel
         else:
             snake1.x = random.randrange(20,880)
@@ -128,6 +134,7 @@ while aberto:
             pontos -=50
     elif last_key == "d":
         if snake1.x<870:
+            snake1.pre_x = snake1. x
             snake1.x += snake1.vel
         else:
             snake1.x = random.randrange(20,880)
@@ -140,7 +147,13 @@ while aberto:
         comida.x = random.randrange(25, 880)
         comida.y = random.randrange(25, 580)
         pontos += 10
+        snake1.size += 1
     pygame.draw.rect(tela, snake1.cor, (snake1.x , snake1.y, snake1.comprimento, snake1.largura)) #Cobra
+    for i in range(snake1.size):
+        if last_key in ["w", "s"]:
+            pygame.draw.rect(tela, snake1.cor, (snake1.x, snake1.y-i*snake1.vel, snake1.comprimento, snake1.largura))
+        elif last_key in ["a", "d"]:
+            pygame.draw.rect(tela, snake1.cor, (snake1.x-i*snake1.vel, snake1.y, snake1. comprimento, snake1.largura))
     pygame.draw.rect(tela, borda_cima.cor, (borda_cima.x, borda_cima.y, borda_cima.comprimento, borda_cima.largura)) #Bordas
     pygame.draw.rect(tela, borda_baixo.cor, (borda_baixo.x, borda_baixo.y, borda_baixo.comprimento, borda_baixo.largura))
     pygame.draw.rect(tela, borda_esquerda.cor, (borda_esquerda.x, borda_esquerda.y, borda_esquerda.comprimento, borda_esquerda.largura))
