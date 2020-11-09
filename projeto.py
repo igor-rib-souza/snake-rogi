@@ -65,6 +65,7 @@ tela = pygame.display.set_mode((900,600)) #Resolução da janela
 pygame.display.set_caption("Projeto P1 // Snake") #Nome da janela
 pygame.mouse.set_visible(0) #Visibilidade do mouse
 
+
 last_key = random.choice(["w", "a", "s", "d"])  #Uma ideia para consertar a movimentação
 aberto = True
 while aberto:
@@ -73,62 +74,68 @@ while aberto:
     for event in pygame.event.get():
         if event.type == pygame.QUIT: #Fechar janela
             aberto = False
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_w: #Movimentação
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_w and last_key != "s": #Movimentação
             if snake1.y>15:
                 last_key = "w" 
             else:
                 snake1.x = random.randrange(20,880)
                 snake1.y = random.randrange(20,580)
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_a: #
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_a and last_key != "d": #
             if snake1.x>15:
                 last_key = "a" 
             else:
                 snake1.x = random.randrange(20,880)
                 snake1.y = random.randrange(20,580)
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_s: #
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_s and last_key != "w": #
             if snake1.y<580:
                 last_key = "s" 
             else:
                 snake1.x = random.randrange(20,880)
                 snake1.y = random.randrange(20,580)
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_d: #
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_d and last_key != "a": #
             if snake1.x<870:
                 last_key = "d" 
             else:
                 snake1.x = random.randrange(20,880)
                 snake1.y = random.randrange(20,580)
+    
+    #Aqui começa a movimentação, por algum erro que eu **AINDA** não identifiquei o respawn da parte de cima não esta funcionando
     if last_key == "w":
         if snake1.y>15:
             snake1.y -= snake1.vel
         else:
             snake1.x = random.randrange(20,880)
             snake1.y = random.randrange(20,580)
+            pontos -= 50
     elif last_key == "a":
         if snake1.x>15:
             snake1.x -= snake1.vel
         else:
             snake1.x = random.randrange(20,880)
             snake1.y = random.randrange(20,580)
+            pontos -=50
     elif last_key == "s":
         if snake1.y<580:
             snake1.y += snake1.vel
         else:
             snake1.x = random.randrange(20,880)
             snake1.y = random.randrange(20,580)
+            pontos -=50
     elif last_key == "d":
         if snake1.x<870:
             snake1.x += snake1.vel
         else:
             snake1.x = random.randrange(20,880)
             snake1.y = random.randrange(20,580)
+            pontos -= 50
 
     tela.fill((0, 0, 0))
-    pygame.draw.rect(tela, snake1.cor, (snake1.x , snake1.y, snake1.comprimento, snake1.largura)) #Cobra
     pygame.draw.rect(tela, comida.cor,(comida.x, comida.y, comida.comprimento, comida.largura)) #Comida
     if abs(comida.x-snake1.x)<=snake1.vel and abs(comida.y-snake1.y)<=snake1.vel:
         comida.x = random.randrange(25, 880)
         comida.y = random.randrange(25, 580)
         pontos += 10
+    pygame.draw.rect(tela, snake1.cor, (snake1.x , snake1.y, snake1.comprimento, snake1.largura)) #Cobra
     pygame.draw.rect(tela, borda_cima.cor, (borda_cima.x, borda_cima.y, borda_cima.comprimento, borda_cima.largura)) #Bordas
     pygame.draw.rect(tela, borda_baixo.cor, (borda_baixo.x, borda_baixo.y, borda_baixo.comprimento, borda_baixo.largura))
     pygame.draw.rect(tela, borda_esquerda.cor, (borda_esquerda.x, borda_esquerda.y, borda_esquerda.comprimento, borda_esquerda.largura))
@@ -136,4 +143,4 @@ while aberto:
     pygame.display.update()
 
 pygame.quit()
-print(pontos)
+print(f"VOCÊ FEZ {pontos} PONTOS !!!")
