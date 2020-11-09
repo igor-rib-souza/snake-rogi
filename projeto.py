@@ -70,6 +70,7 @@ pygame.mouse.set_visible(0) #Visibilidade do mouse
 
 
 last_key = random.choice(["w", "a", "s", "d"])  #Uma ideia para consertar a movimentação
+previous_key = last_key
 if last_key in ["w", "s"]:
     temp = snake1.comprimento
     snake1.comprimento = snake1.largura
@@ -83,24 +84,28 @@ while aberto:
         if event.type == pygame.QUIT: #Fechar janela
             aberto = False
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_w and not last_key in ["s","w"]: #Movimentação
+            previous_key = last_key
             last_key = "w"
             temp = snake1.comprimento
             snake1.comprimento = snake1.largura
             snake1.largura = temp
 
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_a and not last_key  in ["d", "a"]: #
+            previous_key = last_key
             last_key = "a" 
             temp = snake1.comprimento
             snake1.comprimento = snake1.largura
             snake1.largura = temp
 
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_s and not last_key in ["w", "s"]: #
+            previous_key = last_key
             last_key = "s" 
             temp = snake1.comprimento
             snake1.comprimento = snake1.largura
             snake1.largura = temp
 
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_d and not last_key in ["a", "d"]: #
+            previous_key = last_key
             last_key = "d" 
             temp = snake1.comprimento
             snake1.comprimento = snake1.largura
@@ -116,6 +121,7 @@ while aberto:
             snake1.x = random.randrange(20,880)
             snake1.y = random.randrange(20,580)
             pontos -= 50
+            snake1.size = 1
     elif last_key == "a":
         if snake1.x>15:
             snake1.pre_x = snake1.x
@@ -124,6 +130,7 @@ while aberto:
             snake1.x = random.randrange(20,880)
             snake1.y = random.randrange(20,580)
             pontos -=50
+            snake1.size = 1
     elif last_key == "s":
         if snake1.y<580:
             snake1.pre_y = snake1.y
@@ -132,6 +139,7 @@ while aberto:
             snake1.x = random.randrange(20,880)
             snake1.y = random.randrange(20,580)
             pontos -=50
+            snake1.size = 1
     elif last_key == "d":
         if snake1.x<870:
             snake1.pre_x = snake1. x
@@ -140,7 +148,8 @@ while aberto:
             snake1.x = random.randrange(20,880)
             snake1.y = random.randrange(20,580)
             pontos -= 50
-
+            snake1.size = 1
+    
     tela.fill((0, 0, 0))
     pygame.draw.rect(tela, comida.cor,(comida.x, comida.y, comida.comprimento, comida.largura)) #Comida
     if abs(comida.x-snake1.x)<=snake1.vel and abs(comida.y-snake1.y)<=snake1.vel:
@@ -149,16 +158,56 @@ while aberto:
         pontos += 10
         snake1.size += 1
     pygame.draw.rect(tela, snake1.cor, (snake1.x , snake1.y, snake1.comprimento, snake1.largura)) #Cobra
-    for i in range(snake1.size):
-        if last_key in ["w", "s"]:
-            pygame.draw.rect(tela, snake1.cor, (snake1.x, snake1.y-i*snake1.vel, snake1.comprimento, snake1.largura))
-        elif last_key in ["a", "d"]:
-            pygame.draw.rect(tela, snake1.cor, (snake1.x-i*snake1.vel, snake1.y, snake1. comprimento, snake1.largura))
+    if snake1.size>1:
+        for i in range(snake1.size):
+            if last_key in ["w", "s"] and previous_key in ["w", "s"]:  #OK
+                if last_key == "w":
+                    pygame.draw.rect(tela, snake1.cor, (snake1.x, snake1.y+i*2*snake1.vel, snake1.comprimento, snake1.largura))
+                else:
+                    pygame.draw.rect(tela, snake1.cor, (snake1.x, snake1.y-i*2*snake1.vel, snake1.comprimento, snake1.largura))
+            elif last_key in ["a", "d"] and previous_key in ["a", "d"]:  #OK
+                if last_key == "a":
+                    pygame.draw.rect(tela, snake1.cor, (snake1.x+i*2*snake1.vel, snake1.y, snake1.comprimento, snake1.largura))
+                else:
+                    pygame.draw.rect(tela, snake1.cor, (snake1.x-i*2*snake1.vel, snake1.y, snake1.comprimento, snake1.largura))
+
+
+            else:
+                temp = snake1.comprimento
+                snake1.comprimento = snake1.largura
+                snake1.largura = temp
+                if last_key == "w" and previous_key == "a":
+                    pygame.draw.rect(tela, snake1.cor, (snake1.x-i*2*snake1.vel, snake1.y+snake1.comprimento, snake1.comprimento, snake1.largura))
+                elif last_key == "w" and previous_key == "d":
+                    pygame.draw.rect(tela, snake1.cor, (snake1.x+i*2*snake1.vel, snake1.y+snake1.comprimento, snake1.comprimento, snake1.largura))
+            #elif last_key == "a" and previous_key == "w":
+    
+                snake1.largura = snake1.comprimento
+                snake1.comprimento = temp
+        #PELO VISTO EU VOU TER QUE SUBSTITUIR ISSO AQUI POR 12, DOZE, TWELVE IFs :DDDD
+        #Graças a deus só serão 8...
+        """
+        elif    last_key in ["w", "s"] and previous_key in ["a", "d"] and snake1.size>1:
+            temp = snake1.comprimento
+            snake1.comprimento = snake1.largura
+            snake1.largura = temp
+            pygame.draw.rect(tela, snake1.cor, (snake1.x, snake1.y-i*2*snake1.vel, snake1. comprimento, snake1.largura))
+            snake1.largura = snake1.comprimento
+            snake1.comprimento = temp
+        elif last_key in ["a", "d"] and previous_key in ["w", "s"] and snake1.size>1:
+            temp = snake1.comprimento
+            snake1.comprimento = snake1.largura
+            snake1.largura = temp
+            pygame.draw.rect(tela, snake1.cor, (snake1.x, snake1.y-i*2*snake1.vel, snake1.comprimento, snake1.largura))
+            snake1.largura = snake1.comprimento
+            snake1.comprimento = temp
+            """
     pygame.draw.rect(tela, borda_cima.cor, (borda_cima.x, borda_cima.y, borda_cima.comprimento, borda_cima.largura)) #Bordas
     pygame.draw.rect(tela, borda_baixo.cor, (borda_baixo.x, borda_baixo.y, borda_baixo.comprimento, borda_baixo.largura))
     pygame.draw.rect(tela, borda_esquerda.cor, (borda_esquerda.x, borda_esquerda.y, borda_esquerda.comprimento, borda_esquerda.largura))
     pygame.draw.rect(tela, borda_direita.cor, (borda_direita.x, borda_direita.y, borda_direita.comprimento, borda_direita.largura))
     pygame.display.update()
+    previous_key = last_key
 
 pygame.quit()
 print(f"VOCÊ FEZ {pontos} PONTOS !!!")
