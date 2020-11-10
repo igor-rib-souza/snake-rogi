@@ -1,24 +1,3 @@
-"""================7/11
-Eu vou precisar modificar a movimentação
-para quando a cobra for se mover verticalmente, exemplo:
-if event.type == KEYDOWN and event.key == K_w:
-   if last_key == "a" or last_key == "d"
-
-Também preciso implementar colisões, pontuação, crescimento após comer, aceleração ao longo do tempo
-
-================8/11
-Se a cobra tocar na comida(a hitbox não está perfeita) a comida troca de lugar e são somados 10 pontos(que eu ainda não sei como exibir no jogo)
-se a cobra toca a parede ela nasce em outro ponto, preciso implementar a diminuição de pontos caso isso aconteça
-
-
-================9/11
-Eu preciso mudar todo o sistema de movimentação *para dentro de while's, para quando uma tecla for pressionada ele andar nql posição até 
-outra tecla ser pressionada
-
-Preciso modificar a movimentação para só mudar para direita/esquerda quando estiver subindo e descendo e vice-versa
-
-Preciso APRENDER(ou descobrir...) como fazer a animação do movimento e como mostrar a pontuação in-game"""
-
 import pygame
 import random
 
@@ -39,7 +18,7 @@ class snake:  #Aqui eu preciso aprender como usar o __init__ para criar o modo m
         self.size = 1
 
 snake1 = snake((255, 0, 0))
-snake2 = snake((200, 0, 200)) #isso deve ser usado quando o sonho de um multiplayer for real
+snake2 = snake((200, 0, 180)) #isso deve ser usado quando o sonho de um multiplayer for real
 
 
 class comida:
@@ -160,50 +139,47 @@ while aberto:
     pygame.draw.rect(tela, snake1.cor, (snake1.x , snake1.y, snake1.comprimento, snake1.largura)) #Cobra
     if snake1.size>1:
         for i in range(snake1.size-1):
-            if last_key in ["w", "s"] and previous_key in ["w", "s"]:  #OK
+            if last_key in ["w", "s"] and previous_key in ["w", "s"]:   #MOVIMENTAÇÃO SEM CURVA   #OK
                 if last_key == "w":
-                    pygame.draw.rect(tela, snake1.cor, (snake1.x, snake1.y+i*2*snake1.vel, snake1.comprimento, snake1.largura))
+                    pygame.draw.rect(tela, snake1.cor, (snake1.x, snake1.y+(i+1)*2*snake1.vel, snake1.comprimento, snake1.largura))
                 else:
-                    pygame.draw.rect(tela, snake1.cor, (snake1.x, snake1.y-i*2*snake1.vel, snake1.comprimento, snake1.largura))
+                    pygame.draw.rect(tela, snake1.cor, (snake1.x, snake1.y-(i+1)*2*snake1.vel, snake1.comprimento, snake1.largura))
             elif last_key in ["a", "d"] and previous_key in ["a", "d"]:  #OK
                 if last_key == "a":
-                    pygame.draw.rect(tela, snake1.cor, (snake1.x+i*2*snake1.vel, snake1.y, snake1.comprimento, snake1.largura))
+                    pygame.draw.rect(tela, snake1.cor, (snake1.x+(i+1)*2*snake1.vel, snake1.y, snake1.comprimento, snake1.largura))
                 elif last_key =="d":
-                    pygame.draw.rect(tela, snake1.cor, (snake1.x-i*2*snake1.vel, snake1.y, snake1.comprimento, snake1.largura))
-                
+                    pygame.draw.rect(tela, snake1.cor, (snake1.x-(i+1)*2*snake1.vel, snake1.y, snake1.comprimento, snake1.largura))
+             
 
 
-            else:
+            else:      #MOVIMENTAÇÃO COM CURVA
                 temp = snake1.comprimento
                 snake1.comprimento = snake1.largura
                 snake1.largura = temp
                 if last_key == "w" and previous_key == "a":
-                    pygame.draw.rect(tela, snake1.cor, (snake1.x+i*snake1.largura, snake1.y+snake1.comprimento, snake1.comprimento, snake1.largura))  #ok
+                    pygame.draw.rect(tela, snake1.cor, (snake1.x+(i)*snake1.largura, snake1.y+snake1.comprimento, snake1.comprimento, snake1.largura))  #ok
 
                 elif last_key == "w" and previous_key == "d":
-                    pygame.draw.rect(tela, snake1.cor, (snake1.x-(i+1)*snake1.largura, snake1.y+snake1.comprimento, snake1.comprimento, snake1.largura))  #essa linha esta ok, mas alguma coisa esta desenhando um quadrado a mais na base da cobra..
-            #elif last_key == "a" and previous_key == "w":
-    
+                    pygame.draw.rect(tela, snake1.cor, (snake1.x-(i+1)*snake1.largura, snake1.y+snake1.comprimento, snake1.comprimento, snake1.largura))  #OK
+                elif last_key == "s" and previous_key == "a":
+                    pygame.draw.rect(tela, snake1.cor, (snake1.x+i*snake1.largura, snake1.y-snake1.comprimento/2, snake1.comprimento, snake1.largura)) #OK
+                elif last_key == "s" and previous_key == "d":
+                    pygame.draw.rect(tela, snake1.cor, (snake1.x-(i+1)*snake1.largura, snake1.y-snake1.comprimento/2, snake1.comprimento, snake1.largura)) #OK
+                elif last_key == "a" and previous_key == "w":
+                    pygame.draw.rect(tela, snake1. cor, (snake1.x+1*snake1.largura, snake1.y+(i)*snake1.comprimento, snake1.comprimento, snake1.largura)) #OK
+                elif last_key == "a" and previous_key == "s":
+                    pygame.draw.rect(tela, snake1. cor, (snake1.x+1*snake1.largura, snake1.y-(i+1)*snake1.comprimento, snake1.comprimento, snake1.largura)) #OK
+                elif last_key == "d" and previous_key == "w":
+                    pygame.draw.rect(tela, snake1. cor, (snake1.x-snake1.comprimento, snake1.y+(i)*snake1.comprimento, snake1.comprimento, snake1.largura))
+                
+                elif last_key == "d" and previous_key == "s":
+                    pygame.draw.rect(tela, snake1. cor, (snake1.x-snake1.comprimento, snake1.y-(i+1)*snake1.comprimento, snake1.comprimento, snake1.largura)) #OK
+
+                if snake1.size>2:
                 snake1.largura = snake1.comprimento
                 snake1.comprimento = temp
-        #PELO VISTO EU VOU TER QUE SUBSTITUIR ISSO AQUI POR 12, DOZE, TWELVE IFs :DDDD
-        #Graças a deus só serão 8...
-        """
-        elif    last_key in ["w", "s"] and previous_key in ["a", "d"] and snake1.size>1:
-            temp = snake1.comprimento
-            snake1.comprimento = snake1.largura
-            snake1.largura = temp
-            pygame.draw.rect(tela, snake1.cor, (snake1.x, snake1.y-i*2*snake1.vel, snake1. comprimento, snake1.largura))
-            snake1.largura = snake1.comprimento
-            snake1.comprimento = temp
-        elif last_key in ["a", "d"] and previous_key in ["w", "s"] and snake1.size>1:
-            temp = snake1.comprimento
-            snake1.comprimento = snake1.largura
-            snake1.largura = temp
-            pygame.draw.rect(tela, snake1.cor, (snake1.x, snake1.y-i*2*snake1.vel, snake1.comprimento, snake1.largura))
-            snake1.largura = snake1.comprimento
-            snake1.comprimento = temp
-            """
+                 
+
     pygame.draw.rect(tela, borda_cima.cor, (borda_cima.x, borda_cima.y, borda_cima.comprimento, borda_cima.largura)) #Bordas
     pygame.draw.rect(tela, borda_baixo.cor, (borda_baixo.x, borda_baixo.y, borda_baixo.comprimento, borda_baixo.largura))
     pygame.draw.rect(tela, borda_esquerda.cor, (borda_esquerda.x, borda_esquerda.y, borda_esquerda.comprimento, borda_esquerda.largura))
