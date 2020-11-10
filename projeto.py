@@ -31,8 +31,8 @@ class snake:  #Aqui eu preciso aprender como usar o __init__ para criar o modo m
         self.x = random.randrange(50,850)
         self.y = random.randrange(50,550)
         self.vel = 5
-        self.comprimento = 17
-        self.largura = 7
+        self.comprimento = 16
+        self.largura = 8
         self.cor = cor #RGB
         self.pre_x = self.x
         self.pre_y = self.y
@@ -159,7 +159,7 @@ while aberto:
         snake1.size += 1
     pygame.draw.rect(tela, snake1.cor, (snake1.x , snake1.y, snake1.comprimento, snake1.largura)) #Cobra
     if snake1.size>1:
-        for i in range(snake1.size):
+        for i in range(snake1.size-1):
             if last_key in ["w", "s"] and previous_key in ["w", "s"]:  #OK
                 if last_key == "w":
                     pygame.draw.rect(tela, snake1.cor, (snake1.x, snake1.y+i*2*snake1.vel, snake1.comprimento, snake1.largura))
@@ -168,8 +168,9 @@ while aberto:
             elif last_key in ["a", "d"] and previous_key in ["a", "d"]:  #OK
                 if last_key == "a":
                     pygame.draw.rect(tela, snake1.cor, (snake1.x+i*2*snake1.vel, snake1.y, snake1.comprimento, snake1.largura))
-                else:
+                elif last_key =="d":
                     pygame.draw.rect(tela, snake1.cor, (snake1.x-i*2*snake1.vel, snake1.y, snake1.comprimento, snake1.largura))
+                
 
 
             else:
@@ -177,9 +178,10 @@ while aberto:
                 snake1.comprimento = snake1.largura
                 snake1.largura = temp
                 if last_key == "w" and previous_key == "a":
-                    pygame.draw.rect(tela, snake1.cor, (snake1.x-i*2*snake1.vel, snake1.y+snake1.comprimento, snake1.comprimento, snake1.largura))
+                    pygame.draw.rect(tela, snake1.cor, (snake1.x+i*snake1.largura, snake1.y+snake1.comprimento, snake1.comprimento, snake1.largura))  #ok
+
                 elif last_key == "w" and previous_key == "d":
-                    pygame.draw.rect(tela, snake1.cor, (snake1.x+i*2*snake1.vel, snake1.y+snake1.comprimento, snake1.comprimento, snake1.largura))
+                    pygame.draw.rect(tela, snake1.cor, (snake1.x-(i+1)*snake1.largura, snake1.y+snake1.comprimento, snake1.comprimento, snake1.largura))  #essa linha esta ok, mas alguma coisa esta desenhando um quadrado a mais na base da cobra..
             #elif last_key == "a" and previous_key == "w":
     
                 snake1.largura = snake1.comprimento
