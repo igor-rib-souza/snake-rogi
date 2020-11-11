@@ -69,10 +69,11 @@ while aberto:
     if len(cobra)>1:
         for i in range(1,len(cobra)-1):
             if cobra[0][0] == cobra[i][0] and cobra[0][1] == cobra[i][1]:
+                cobra = [[0,0]]
                 cobra[0][0] = random.randrange(50,850,10)
                 cobra[0][1] = random.randrange(50,550,10)
-                for i in range(len(cobra)-1):
-                    cobra.pop()
+                break 
+                
 
 
 
