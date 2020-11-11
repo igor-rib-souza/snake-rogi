@@ -1,3 +1,5 @@
+from survival import survival
+from singleplayer import singleplayer
 import sys
 import pygame
 
@@ -8,16 +10,17 @@ font2 = pygame.font.Font("freesansbold.ttf", 20)
 font = pygame.font.Font('freesansbold.ttf', 32) 
 text = font.render('Snake, the Game', True, (255,255,255), (0,0,0)) 
 single = font2.render("Singleplayer",True,(200,0,200),(0,0,0))
-survival = font2.render("Survival mode",True,(0,200,200),(0,0,0))
+survive = font2.render("Survival mode",True,(0,200,200),(0,0,0))
 
 def menu():
     while True:
-        
+        pygame.mouse.set_visible(1)
+
         tela.blit(text,(340,40)) 
         
         tela.blit(single,(340,250))
 
-        tela.blit(survival,(340,300))
+        tela.blit(survive,(340,300))
 
 
 
@@ -31,6 +34,13 @@ def menu():
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     sys.exit()
+            elif event.type == pygame.MOUSEBUTTONUP:
+                pos = pygame.mouse.get_pos()
+                if pos[0] in range(340,465) and pos[1] in range(250,265):
+                    singleplayer()
+                elif pos[0] in range(340, 480) and pos[1] in range(300, 315):
+                    survival()
+        
 
         pygame.display.update()
 
