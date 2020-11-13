@@ -5,7 +5,7 @@ import random
 def survival():
     score = 0
     tempo = 0
-
+    fps = pygame.time.Clock()
     class snake:
         def __init__(self, cor, vel, larg, comp):
             self.cor = cor
@@ -53,7 +53,13 @@ def survival():
 
     aberto = True
     while aberto:
-        pygame.time.delay(100)
+        if len(cobra)<=10:
+            fps.tick(10)
+        elif len(cobra)<=20:
+            fps.tick(len(cobra))
+        else:
+            fps.tick(20)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT: #Checa se o usuário fechou o jogo
                 aberto = False
@@ -128,7 +134,7 @@ def survival():
     sys.exit()
 
 def singleplayer():
-
+    fps = pygame.time.Clock()
     class snake:
         def __init__(self, cor, vel, larg, comp):
             self.cor = cor
@@ -176,7 +182,12 @@ def singleplayer():
 
     aberto = True
     while aberto:
-        pygame.time.delay(100)
+        if len(cobra)<=10:
+            fps.tick(10)
+        elif len(cobra)<=20:
+            fps.tick(len(cobra))
+        else:
+            fps.tick(20)
         for event in pygame.event.get():
             if event.type == pygame.QUIT: #Checa se o usuário fechou o jogo
                 aberto = False
