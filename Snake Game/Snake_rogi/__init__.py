@@ -2,6 +2,11 @@ import sys
 import pygame
 import random
 
+def show_score(pontuacao,screen):
+    fonte = pygame.font.Font("freesansbold.ttf", 20)
+    pontos = fonte.render(f"{pontuacao}",True,(255, 255, 255),(0, 0, 0))
+    screen.blit(pontos,(20,20))
+
 def survival():
     score = 0
     tempo = 0
@@ -80,7 +85,6 @@ def survival():
 
 
         if len(cobra)>1: #Colisão com a própria cobra
-            score -=50
             for i in range(1,len(cobra)-1):
                 if cobra[0][0] == cobra[i][0] and cobra[0][1] == cobra[i][1]:
                     cobra = [[0,0]]
@@ -101,6 +105,8 @@ def survival():
 
         tela.fill((0, 0, 0)) #preenche de preto
 
+        show_score(score,tela)
+
         pygame.draw.rect(tela, comida.cor,(comida.x, comida.y, comida.comprimento, comida.largura))#Comida
         if cobra[0][0] == comida.x and cobra[0][1] == comida.y:
             comida.x = random.randrange(20,880, 10)
@@ -114,7 +120,7 @@ def survival():
             cobra[0][1] = random.randrange(50,550,10)
             for i in range(len(cobra)-1):
                 cobra.pop()
-            score -= 50
+            score = 0   #Verificar arquivo de pontos, quando este for criado
 
         tempo += 0.1
         if tempo >= 2.5:
@@ -134,6 +140,7 @@ def survival():
     sys.exit()
 
 def singleplayer():
+    score = 0
     fps = pygame.time.Clock()
     class snake:
         def __init__(self, cor, vel, larg, comp):
@@ -213,6 +220,7 @@ def singleplayer():
                     cobra = [[0,0]]
                     cobra[0][0] = random.randrange(50,850,10)
                     cobra[0][1] = random.randrange(50,550,10)
+                    score = 0
                     break 
 
 
@@ -227,18 +235,22 @@ def singleplayer():
 
 
         tela.fill((0, 0, 0)) #preenche de preto
+        
+        show_score(score,tela)
 
         pygame.draw.rect(tela, comida.cor,(comida.x, comida.y, comida.comprimento, comida.largura))#Comida
         if cobra[0][0] == comida.x and cobra[0][1] == comida.y:
             comida.x = random.randrange(20,880, 10)
             comida.y = random.randrange(20,580, 10)
             cobra.append([cobra[-1][0] ,cobra[-1][1]])
+            score += 10
 
         if cobra[0][0] >= 890 or cobra[0][0] < 10 or cobra[0][1] >= 590 or cobra[0][1] < 10: #checa colisões com as bordas
             cobra[0][0] = random.randrange(50,850,10)
             cobra[0][1] = random.randrange(50,550,10)
             for i in range(len(cobra)-1):
                 cobra.pop()
+            score = 0
 
         for i in range(len(cobra)):  #Desenhar a cobra com base no comprimento(número de tuplas)
             pygame.draw.rect(tela, serpente.cor, (cobra[i][0], cobra[i][1], serpente.comp, serpente.larg))
