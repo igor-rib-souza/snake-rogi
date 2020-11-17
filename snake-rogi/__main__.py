@@ -107,7 +107,22 @@ def multiplayer():
             opostos = False
       # """ 
         for i in range(len(cobra1)):   #Colisão entre as cobras
-            if cobra2[0][0] == cobra1[i][0] and cobra2[0][1] == cobra1[i][1]:
+            if cobra2[0][0] == cobra1[i][0] and cobra2[0][1] == cobra1[i][1] or abs(cobra1[0][0]-cobra2[0][0])==10 and cobra1[0][1]==cobra2[0][1] and opostos == True and mov1 in [direita,esquerda]:
+                if i == 0 and opostos == True:
+                    cobra2 = [[0,0]]
+                    cobra2[0][0] = random.randrange(50,850,10)
+                    cobra2[0][1] = random.randrange(50,550,10)
+                    cobra1 = [[0,0]]
+                    cobra1[0][0] = random.randrange(50,850,10)
+                    cobra1[0][1] = random.randrange(50,550,10)
+                    break
+                else:
+                    cobra2 = [[0,0]]
+                    cobra2[0][0] = random.randrange(50,850,10)
+                    cobra2[0][1] = random.randrange(50,550,10)
+                    break
+
+            elif cobra2[0][0] == cobra1[i][0] and cobra2[0][1] == cobra1[i][1] or abs(cobra1[0][1]-cobra2[0][1])==10 and cobra1[0][0]==cobra2[0][0] and opostos == True and mov1 in [cima,baixo]:
                 if i == 0 and opostos == True:
                     cobra2 = [[0,0]]
                     cobra2[0][0] = random.randrange(50,850,10)
