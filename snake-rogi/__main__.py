@@ -101,18 +101,43 @@ def multiplayer():
                 elif event.key == pygame.K_LEFT and not mov2 == direita:
                     mov2 = esquerda
         
-        for i in range(len(cobra1)-1):
+        if mov1 == cima and mov2 == baixo or mov1 == esquerda and mov2 == direita or mov1 == baixo and mov2 == cima or mov1 == direita and mov2 == esquerda:
+            opostos = True
+        else:
+            opostos = False
+      # """ 
+        for i in range(len(cobra1)):   #Colisão entre as cobras
             if cobra2[0][0] == cobra1[i][0] and cobra2[0][1] == cobra1[i][1]:
-                cobra2 == [[0,0]]
-                cobra2[0][0] = random.randrange(50,850,10)
-                cobra2[0][1] = random.randrange(50,550,10)
-        for i2 in range(len(cobra2)-1):
-            if cobra1[0][0] == cobra2[i][0] and cobra1[0][1] == cobra2[i][1]:
-                cobra1 == [[0,0]]
-                cobra1[0][0] = random.randrange(50,850,10)
-                cobra2[0][1] = random.randrange(50,550,10)
+                if i == 0 and opostos == True:
+                    cobra2 = [[0,0]]
+                    cobra2[0][0] = random.randrange(50,850,10)
+                    cobra2[0][1] = random.randrange(50,550,10)
+                    cobra1 = [[0,0]]
+                    cobra1[0][0] = random.randrange(50,850,10)
+                    cobra1[0][1] = random.randrange(50,550,10)
+                    break
+                else:
+                    cobra2 = [[0,0]]
+                    cobra2[0][0] = random.randrange(50,850,10)
+                    cobra2[0][1] = random.randrange(50,550,10)
+                    break
+        for i2 in range(len(cobra2)):
+            if cobra1[0][0] == cobra2[i2][0] and cobra1[0][1] == cobra2[i2][1]:
+                if i2 == 0 and opostos == True:
+                    cobra2 = [[0,0]]
+                    cobra2[0][0] = random.randrange(50,850,10)
+                    cobra2[0][1] = random.randrange(50,550,10)
+                    cobra1 = [[0,0]]
+                    cobra1[0][0] = random.randrange(50,850,10)
+                    cobra1[0][1] = random.randrange(50,550,10)
+                    break
+                else:
+                    cobra1 = [[0,0]]
+                    cobra1[0][0] = random.randrange(50,850,10)
+                    cobra1[0][1] = random.randrange(50,550,10)
+                    break
 
-        if len(cobra1)>1:
+        if len(cobra1)>1:  #Colisão com a própria cobra
             for i in range(1,len(cobra1)-1):
                 if cobra1[0][0] == cobra1[i][0] and cobra1[0][1] == cobra1[i][1]:
                     cobra1 = [[0,0]]
@@ -121,7 +146,7 @@ def multiplayer():
                     #score = 0 pensando sobre como adicionar pontos nesse modo
                     break 
         
-        if len(cobra2)>1:
+        if len(cobra2)>1:  #Colisão com  própria cobra
             for i in range(1,len(cobra2)-1):
                 if cobra2[0][0] == cobra2[i][0] and cobra2[0][1] == cobra2[i][1]:
                     cobra2 = [[0,0]]
