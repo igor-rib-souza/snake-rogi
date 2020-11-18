@@ -436,15 +436,25 @@ def singleplayer():
                     return
 
 
-        if len(cobra)>1:
+        if len(cobra)>1:   #Morte     
             for i in range(1,len(cobra)-1):
                 if cobra[0][0] == cobra[i][0] and cobra[0][1] == cobra[i][1]:
                     cobra = [[0,0]]
                     cobra[0][0] = random.randrange(50,850,10)
                     cobra[0][1] = random.randrange(50,550,10)
-                    pontos_atual.append(score)
+                    pontos_atual.append(score)  #Começo da atualização do arquivo
+                    for linha in pontos:
+                        if not linha == "\n":
+                            pontos_atual.append(int(linha))
                     pontos_atual.sort()
-                    pontos_atual.pop(0)
+                    while not len(pontos_atual) == 5:
+                        pontos_atual.pop(0)
+                    novos_pontos = open("single.txt","w")
+                    for i in range(len(pontos_atual)-1,-1,-1):
+                        if not i == 0:
+                            novos_pontos.write(f"{pontos_atual[i]}\n")
+                        else:
+                            novos_pontos.write(str(pontos_atual[i]))
                     score = 0
                     break 
 
@@ -470,19 +480,18 @@ def singleplayer():
             cobra.append([cobra[-1][0] ,cobra[-1][1]])
             score += 10
 
-        if cobra[0][0] >= 890 or cobra[0][0] < 10 or cobra[0][1] >= 590 or cobra[0][1] < 10: #checa colisões com as bordas
+        if cobra[0][0] >= 890 or cobra[0][0] < 10 or cobra[0][1] >= 590 or cobra[0][1] < 10: #Morte                       
             cobra[0][0] = random.randrange(50,850,10)
             cobra[0][1] = random.randrange(50,550,10)
             for i in range(len(cobra)-1):
                 cobra.pop()
-            pontos_atual.append(score)
+            pontos_atual.append(score)  #Começo da atualização do arquivo
             for linha in pontos:
                 if not linha == "\n":
                     pontos_atual.append(int(linha))
             pontos_atual.sort()
             while not len(pontos_atual) == 5:
                 pontos_atual.pop(0)
-                print(pontos_atual)
             novos_pontos = open("single.txt","w")
             for i in range(len(pontos_atual)-1,-1,-1):
                 if not i == 0:
