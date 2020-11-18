@@ -2,6 +2,64 @@ import sys
 import pygame
 import random
 
+def pontuacion():
+    pygame.init()
+    tela = pygame.display.set_mode((900, 600))
+    fonte = pygame.font.Font("freesansbold.ttf", 20)
+    single = open("single.txt","r")
+    survival = open("survival.txt","r")
+    sing = fonte.render("Singleplayer",True,(200,0,200),(0,0,0))
+    surv = fonte.render("Survival Mode",True,(0,200,200),(0,0,0))
+   
+
+    si = []
+    su = []
+    while True:
+        xsing = 225
+        xsurv = 475
+        ysing = 150
+        ysurv = 150
+        pygame.mouse.set_visible(0)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                tela.fill((0,0,0))
+                return
+        tela.fill((0,0,0))
+        tela.blit(sing,(225,100))
+        tela.blit(surv,(475,100))
+        for i in single:
+            string = ""
+            for j in i:
+                if j != "\n":
+                    string += j
+                else:
+                    si.append(string)
+                    string = ""
+        for i in survival:
+            string = ""
+            for j in i:
+                if j != "\n":
+                    string += j
+                else:
+                    su.append(string)
+                    string = ""
+
+        tela.blit(fonte.render(si[0],True,(255,255,255),(0,0,0)),(xsing,ysing))
+        tela.blit(fonte.render(si[1],True,(255,255,255),(0,0,0)),(xsing,ysing+50))
+        tela.blit(fonte.render(si[2],True,(255,255,255),(0,0,0)),(xsing,ysing+100))
+        tela.blit(fonte.render(si[3],True,(255,255,255),(0,0,0)),(xsing,ysing+150))
+        tela.blit(fonte.render(si[4],True,(255,255,255),(0,0,0)),(xsing,ysing+200))
+        tela.blit(fonte.render(su[0],True,(255,255,255),(0,0,0)),(xsurv,ysurv))
+        tela.blit(fonte.render(su[1],True,(255,255,255),(0,0,0)),(xsurv,ysurv+50))
+        tela.blit(fonte.render(su[2],True,(255,255,255),(0,0,0)),(xsurv,ysurv+100))
+        tela.blit(fonte.render(su[3],True,(255,255,255),(0,0,0)),(xsurv,ysurv+150))
+        tela.blit(fonte.render(su[4],True,(255,255,255),(0,0,0)),(xsurv,ysurv+200))
+
+        pygame.display.update()
+
 def show_score(pontuacao,screen):
     fonte = pygame.font.Font("freesansbold.ttf", 20)
     pontos = fonte.render(f"{pontuacao}",True,(255, 255, 255),(0, 0, 0))
@@ -227,6 +285,8 @@ def multiplayer():
     sys.exit()
 
 def survival():
+    pontos_atual = [0, 0, 0, 0, 0]
+    pontos = open("survival.txt","r")
     score = 0
     tempo = 0
     fps = pygame.time.Clock()
@@ -303,12 +363,22 @@ def survival():
                     return
 
 
-        if len(cobra)>1: #Colisão com a própria cobra
+        if len(cobra)>1: #Morte
             for i in range(1,len(cobra)-1):
                 if cobra[0][0] == cobra[i][0] and cobra[0][1] == cobra[i][1]:
                     cobra = [[0,0]]
                     cobra[0][0] = random.randrange(50,850,10)
                     cobra[0][1] = random.randrange(50,550,10)
+                    pontos_atual.append(score)  #Começo da atualização do arquivo
+                    for linha in pontos:
+                        if not linha == "\n":
+                            pontos_atual.append(int(linha))
+                    pontos_atual.sort()
+                    while not len(pontos_atual) == 5:
+                        pontos_atual.pop(0)
+                    novos_pontos = open("survival.txt","w")
+                    for i in range(len(pontos_atual)-1,-1,-1):
+                        novos_pontos.write(f"{pontos_atual[i]}\n")
                     score = 0
                     break 
 
@@ -335,11 +405,22 @@ def survival():
                 cobra.pop()
                 cobra.pop()
             score += 10
-        if cobra[0][0] >= 890 or cobra[0][0] < 10 or cobra[0][1] >= 590 or cobra[0][1] < 10: #checa colisões com as bordas
+        if cobra[0][0] >= 890 or cobra[0][0] < 10 or cobra[0][1] >= 590 or cobra[0][1] < 10: #Morte
             cobra[0][0] = random.randrange(50,850,10)
             cobra[0][1] = random.randrange(50,550,10)
             for i in range(len(cobra)-1):
                 cobra.pop()
+            pontos_atual.append(score)  #Começo da atualização do arquivo
+            for linha in pontos:
+                if not linha == "\n":
+                    pontos_atual.append(int(linha))
+            pontos_atual.sort()
+            while not len(pontos_atual) == 5:
+                pontos_atual.pop(0)
+            novos_pontos = open("survival.txt","w")
+            for i in range(len(pontos_atual)-1,-1,-1):
+                novos_pontos.write(f"{pontos_atual[i]}\n")
+
             score = 0   #Verificar arquivo de pontos, quando este for criado
 
         tempo += 0.1
@@ -453,8 +534,6 @@ def singleplayer():
                     for i in range(len(pontos_atual)-1,-1,-1):
                         if not i == 0:
                             novos_pontos.write(f"{pontos_atual[i]}\n")
-                        else:
-                            novos_pontos.write(str(pontos_atual[i]))
                     score = 0
                     break 
 
@@ -494,10 +573,7 @@ def singleplayer():
                 pontos_atual.pop(0)
             novos_pontos = open("single.txt","w")
             for i in range(len(pontos_atual)-1,-1,-1):
-                if not i == 0:
-                    novos_pontos.write(f"{pontos_atual[i]}\n")
-                else:
-                    novos_pontos.write(str(pontos_atual[i]))
+                novos_pontos.write(f"{pontos_atual[i]}\n")
             score = 0
 
         for i in range(len(cobra)):  #Desenhar a cobra com base no comprimento(número de tuplas)
@@ -523,6 +599,7 @@ def menu():
     single = font2.render("Singleplayer",True,(200,0,200),(0,0,0))
     survive = font2.render("Survival mode",True,(0,200,200),(0,0,0))
     versus = font2.render("Versus mode", True, (100,255,100),(0,0,0))
+    pontuacao = font2.render("High scores", True,(255, 128, 0),(0,0,0))
 
     while True:
         pygame.mouse.set_visible(1)
@@ -534,6 +611,8 @@ def menu():
         tela.blit(survive,(340,300))
 
         tela.blit(versus,(340,350))
+
+        tela.blit(pontuacao,(340, 400))
 
         ("Snake main menu", font, (255, 255, 255), tela, 450, 30)
 
@@ -553,7 +632,8 @@ def menu():
                     survival()
                 elif pos[0] in range(340,470) and pos[1] in range(350,370):
                     multiplayer()
-
+                elif pos[0] in range(340,455) and pos[1] in range(400,420):
+                    pontuacion()
         pygame.display.update()
 
 menu()
