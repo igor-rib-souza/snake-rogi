@@ -360,6 +360,8 @@ def survival():
     sys.exit()
 
 def singleplayer():
+    pontos_atual = [0, 0, 0, 0, 0]
+    pontos = open("single.txt","r")
     score = 0
     fps = pygame.time.Clock()
     class snake:
@@ -416,7 +418,7 @@ def singleplayer():
         else:
             fps.tick(20)
         for event in pygame.event.get():
-            if event.type == pygame.QUIT: #Checa se o usuário fechou o jogo
+            if event.type == pygame.QUIT: #Verifica se o jogo foi fechado
                 aberto = False
                 break
 
@@ -429,7 +431,7 @@ def singleplayer():
                     mov = esquerda
                 elif event.key == pygame.K_d and not mov == esquerda:
                     mov = direita
-                elif event.key == pygame.K_ESCAPE:
+                elif event.key == pygame.K_ESCAPE:  #Verifica se o jogador apertou esc
                     tela.fill((0,0,0))
                     return
 
@@ -440,6 +442,9 @@ def singleplayer():
                     cobra = [[0,0]]
                     cobra[0][0] = random.randrange(50,850,10)
                     cobra[0][1] = random.randrange(50,550,10)
+                    pontos_atual.append(score)
+                    pontos_atual.sort()
+                    pontos_atual.pop(0)
                     score = 0
                     break 
 
@@ -470,6 +475,20 @@ def singleplayer():
             cobra[0][1] = random.randrange(50,550,10)
             for i in range(len(cobra)-1):
                 cobra.pop()
+            pontos_atual.append(score)
+            for linha in pontos:
+                if not linha == "\n":
+                    pontos_atual.append(int(linha))
+            pontos_atual.sort()
+            while not len(pontos_atual) == 5:
+                pontos_atual.pop(0)
+                print(pontos_atual)
+            novos_pontos = open("single.txt","w")
+            for i in range(len(pontos_atual)-1,-1,-1):
+                if not i == 0:
+                    novos_pontos.write(f"{pontos_atual[i]}\n")
+                else:
+                    novos_pontos.write(str(pontos_atual[i]))
             score = 0
 
         for i in range(len(cobra)):  #Desenhar a cobra com base no comprimento(número de tuplas)
@@ -480,7 +499,6 @@ def singleplayer():
         pygame.draw.rect(tela, borda_esquerda.cor, (borda_esquerda.x, borda_esquerda.y, borda_esquerda.comprimento, borda_esquerda.largura))
         pygame.draw.rect(tela, borda_direita.cor, (borda_direita.x, borda_direita.y, borda_direita.comprimento, borda_direita.largura))
         pygame.display.update()
-    
     pygame.quit()
     sys.exit()
 
