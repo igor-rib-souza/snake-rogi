@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="snake-rogi.rib", # Replace with your own username
-    version="1.3.dev2",
+    version="1.3",
     author="Igor Ribeiro de Souza",
     author_email="igor.r.souza@hotmail.com",
     description="The famous game snake, built with python.",
@@ -20,4 +20,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
+    include_package_data=True,
 )

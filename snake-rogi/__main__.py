@@ -1,13 +1,21 @@
+import os
 import sys
 import pygame
 import random
+
+path = __file__
+print(path)
+caminho = path.split("/")
+path = ""
+for i in range(len(caminho)-1):
+    path += caminho[i] + "/"
 
 def pontuacion():
     pygame.init()
     tela = pygame.display.set_mode((900, 600))
     fonte = pygame.font.Font("freesansbold.ttf", 20)
-    single = open("single.txt","r")
-    survival = open("survival.txt","r")
+    single = open(f"{path}single.txt","r")
+    survival = open(f"{path}survival.txt","r")
     sing = fonte.render("Singleplayer",True,(200,0,200),(0,0,0))
     surv = fonte.render("Survival Mode",True,(0,200,200),(0,0,0))
    
@@ -286,7 +294,7 @@ def multiplayer():
 
 def survival():
     pontos_atual = [0, 0, 0, 0, 0]
-    pontos = open("survival.txt","r")
+    pontos = open(f"{path}survival.txt","r")
     score = 0
     tempo = 0
     fps = pygame.time.Clock()
@@ -376,7 +384,7 @@ def survival():
                     pontos_atual.sort()
                     while not len(pontos_atual) == 5:
                         pontos_atual.pop(0)
-                    novos_pontos = open("survival.txt","w")
+                    novos_pontos = open(f"{path}survival.txt","w")
                     for i in range(len(pontos_atual)-1,-1,-1):
                         novos_pontos.write(f"{pontos_atual[i]}\n")
                     score = 0
@@ -417,7 +425,7 @@ def survival():
             pontos_atual.sort()
             while not len(pontos_atual) == 5:
                 pontos_atual.pop(0)
-            novos_pontos = open("survival.txt","w")
+            novos_pontos = open(f"{path}survival.txt","w")
             for i in range(len(pontos_atual)-1,-1,-1):
                 novos_pontos.write(f"{pontos_atual[i]}\n")
 
@@ -442,7 +450,7 @@ def survival():
 
 def singleplayer():
     pontos_atual = [0, 0, 0, 0, 0]
-    pontos = open("single.txt","r")
+    pontos = open(f"{path}single.txt","r")
     score = 0
     fps = pygame.time.Clock()
     class snake:
@@ -530,7 +538,7 @@ def singleplayer():
                     pontos_atual.sort()
                     while not len(pontos_atual) == 5:
                         pontos_atual.pop(0)
-                    novos_pontos = open("single.txt","w")
+                    novos_pontos = open(f"{path}single.txt","w")
                     for i in range(len(pontos_atual)-1,-1,-1):
                         if not i == 0:
                             novos_pontos.write(f"{pontos_atual[i]}\n")
@@ -571,7 +579,7 @@ def singleplayer():
             pontos_atual.sort()
             while not len(pontos_atual) == 5:
                 pontos_atual.pop(0)
-            novos_pontos = open("single.txt","w")
+            novos_pontos = open(f"{path}single.txt","w")
             for i in range(len(pontos_atual)-1,-1,-1):
                 novos_pontos.write(f"{pontos_atual[i]}\n")
             score = 0
