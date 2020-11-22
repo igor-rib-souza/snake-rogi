@@ -10,6 +10,33 @@ path = ""
 for i in range(len(caminho)-1):
     path += caminho[i] + "/"
 
+def gameover(screen,score):
+    pygame.font.get_fonts() 
+    fonte2 = pygame.font.Font("freesansbold.ttf",35)
+    fonte = pygame.font.Font("freesansbold.ttf",20)
+    screen.fill((0,0,0))
+    game_over = fonte2.render("Gameover",True,(255,255,255),(0,0,0))
+    restart = fonte.render("Press Enter to continue",True,(255,255,255),(0,0,0))
+    menu = fonte.render("Press ESC to return",True,(255,255,255),(0,0,0))
+    pontos = fonte.render(f"Score: {score}",True,(0,255,255),(0,0,0))
+    screen.blit(game_over,(350,100))
+    screen.blit(menu,(330,330))
+    screen.blit(restart,(330,300))
+    screen.blit(pontos,(390,400))
+    pygame.display.update()
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    screen.fill((0,0,0))
+                    return False
+                elif event.key == pygame.K_RETURN:
+                    screen.fill((0,0,0))
+                    return True
+            elif event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
 def pontuacion():
     pygame.init()
     tela = pygame.display.set_mode((900, 600))
@@ -387,7 +414,10 @@ def survival():
                     novos_pontos = open(f"{path}survival.txt","w")
                     for i in range(len(pontos_atual)-1,-1,-1):
                         novos_pontos.write(f"{pontos_atual[i]}\n")
-                    score = 0
+                    if gameover(tela,score) == False:
+                        return
+                    else:
+                        score = 0
                     break 
 
 
@@ -428,6 +458,10 @@ def survival():
             novos_pontos = open(f"{path}survival.txt","w")
             for i in range(len(pontos_atual)-1,-1,-1):
                 novos_pontos.write(f"{pontos_atual[i]}\n")
+            if gameover(tela,score) == False:
+                return
+            else:
+                score = 0
 
             score = 0   #Verificar arquivo de pontos, quando este for criado
 
@@ -542,7 +576,10 @@ def singleplayer():
                     for i in range(len(pontos_atual)-1,-1,-1):
                         if not i == 0:
                             novos_pontos.write(f"{pontos_atual[i]}\n")
-                    score = 0
+                    if gameover(tela,score) == False:
+                        return
+                    else:
+                        score = 0
                     break 
 
 
@@ -582,7 +619,10 @@ def singleplayer():
             novos_pontos = open(f"{path}single.txt","w")
             for i in range(len(pontos_atual)-1,-1,-1):
                 novos_pontos.write(f"{pontos_atual[i]}\n")
-            score = 0
+            if gameover(tela,score) == False:
+                return
+            else:
+                score = 0
 
         for i in range(len(cobra)):  #Desenhar a cobra com base no comprimento(número de tuplas)
             pygame.draw.rect(tela, serpente.cor, (cobra[i][0], cobra[i][1], serpente.comp, serpente.larg))
